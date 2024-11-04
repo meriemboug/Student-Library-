@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report Management Interface</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5dc; /* Beige */
+            color: #000; /* Black */
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            background-color: #fff; /* White */
+        }
+        h2 {
+            text-align: center;
+            color: #8B4513; /* Darker Brown */
+        }
+        .report {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+        }
+        .new {
+            background-color: white;
+        }
+        .clicked {
+            background-color: #d3d3d3; /* Gray */
+        }
+        .notification {
+            background-color: lightblue;
+            padding: 5px;
+            border-radius: 3px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        button {
+            background-color: #f9f9f9; /* Light Gold */
+            border: none;
+            cursor: pointer;
+            margin-left: 10px; /* Space between buttons */
+        }
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 1; 
+            left: 0; 
+            top: 0; 
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgb(0,0,0); 
+            background-color: rgba(0,0,0,0.4); 
+            padding-top: 60px; 
+        }
+        .modal-content {
+            background-color: #fefefe; 
+            margin: 5% auto; 
+            padding: 20px; 
+            border-radius: 10px; 
+            width: 80%; 
+        }
+        .close {
+           color: #aaa; 
+           float:right; 
+           font-size:28px; 
+           font-weight:bold; 
+           cursor:pointer; 
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <button onclick="window.location.href='admindash.html'">Back</button>
+    <h2>Report Management</h2>
+
+    <div id="reportList">
+        <div class="report new" id="report1" onclick="showReportDetails('report1')">
+             <div>
+                <span class="notification">New</span>
+                <strong>Report Title 1</strong><br>
+                Module Name | Year L1 | Type Cours
+             </div>
+             <div>
+                 <button onclick="editReport('report1')">Edit</button>
+                 <button onclick="removeReport('report1')">Remove</button>
+             </div>
+         </div>
+
+         <div class="report new" id="report2" onclick="showReportDetails('report2')">
+             <div>
+                <span class="notification">New</span>
+                <strong>Report Title 2</strong><br>
+                Module Name | Year L2 | Type TD
+             </div>
+             <div>
+                 <button onclick="editReport('report2')">Edit</button>
+                 <button onclick="removeReport('report2')">Remove</button>
+             </div>
+         </div>
+
+         <!-- Additional reports can be added here -->
+    </div>
+
+</div>
+
+<!-- Modal for Report Details -->
+<div id="myModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2 id="modalTitle"></h2>
+        <p><strong>Module:</strong> <span id="modalModule"></span></p>
+        <p><strong>Year:</strong> <span id="modalYear"></span></p>
+        <p><strong>Type:</strong> <span id="modalType"></span></p>
+        <p><strong>Description:</strong></p>
+        <p id="modalDescription"></p>
+    </div>
+</div>
+
+<script>
+// Data structure to hold report information
+const reports = {
+    report1: { title: 'Report Title 1', moduleName: 'Module Name', year:'L1', type:'Cours', description:'This is the description for report one.'},
+    report2: { title:'Report Title 2', moduleName:'Module Name', year:'L2', type:'TD', description:'This is the description for report two.'}
+};
+
+function showReportDetails(reportId) {
+    const report = reports[reportId];
+    
+    // Fill modal with report details
+    document.getElementById("modalTitle").innerText = report.title;
+    document.getElementById("modalModule").innerText = report.moduleName;
+    document.getElementById("modalYear").innerText = report.year;
+    document.getElementById("modalType").innerText = report.type;
+    document.getElementById("modalDescription").innerText = report.description;
+
+    // Show the modal
+    const modal = document.getElementById("myModal");
+    modal.style.display = "block";
+
+    // Mark the report as clicked
+    const reportElement = document.getElementById(reportId);
+    reportElement.classList.remove('new');
+    reportElement.classList.add('clicked');
+    
+    const notification = reportElement.querySelector('.notification');
+    if (notification) {
+      notification.style.display = 'none'; // Hide the "New" notification
+    }
+}
+
+function closeModal() {
+    const modal = document.getElementById("myModal");
+    modal.style.display = "none";
+}
+
+window.onclick = function(event) {
+    const modal = document.getElementById("myModal");
+    if (event.target === modal) {
+        closeModal();
+    }
+}
+
+function editReport(reportId) {
+    const report = reports[reportId];
+    
+    // Prompt user for new title and description
+    const newTitle = prompt("Edit Report Title:", report.title);
+    const newDescription = prompt("Edit Report Description:", report.description);
+
+    if (newTitle !== null && newDescription !== null) {
+      reports[reportId].title = newTitle || report.title; // Keep old title if canceled
+      reports[reportId].description = newDescription || report.description; // Keep old description if canceled
+      
+      // Update the displayed title in the report list
+      const reportElement = document.getElementById(reportId);
+      reportElement.querySelector('strong').innerText = reports[reportId].title;
+
+      // Update modal information if it's open
+      if (document.getElementById("myModal").style.display === "block") {
+          showReportDetails(reportId);
+      }
+      
+      alert("Report updated successfully!");
+   }
+}
+
+function removeReport(reportId) {
+   const confirmRemove = confirm("Are you sure you want to remove this report?");
+   if (confirmRemove) {
+       const reportElement = document.getElementById(reportId);
+       reportElement.remove(); // Remove from DOM
+       delete reports[reportId]; // Remove from data structure
+       alert("Report removed successfully!");
+   }
+}
+</script>
+
+</body>
+</html>

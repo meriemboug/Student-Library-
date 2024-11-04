@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management Interface</title>
+    <style>
+        body {
+            font-family: 'Charter', Georgia, serif;
+            background-color: #f5f5dc; /* Beige */
+            color: #000; /* Black */
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            background-color: #fff; /* White */
+        }
+        h2 {
+            text-align: center;
+            color: #4B4B4B; /* Dark Gray */
+        }
+        .user {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            background-color: #f9f9f9; /* Light Gold */
+        }
+        .user:hover {
+            background-color: #e2e2e2; /* Light Gray on hover */
+        }
+        button {
+
+     background-color: gold; /* Gold button color */
+    color: black;
+    border: none;
+    padding: 8px 15px;
+    cursor: pointer;
+    border-radius: 5px; /* Rounded corners for buttons */
+        }
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 1; 
+            left: 0; 
+            top: 0; 
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgb(0,0,0); 
+            background-color: rgba(0,0,0,0.4); 
+            padding-top: 60px; 
+        }
+        .modal-content {
+            background-color: #fefefe; 
+            margin: 5% auto; 
+            padding: 20px; 
+            border-radius: 10px; 
+            width: 50%; 
+        }
+        .close {
+           color: #aaa; 
+           float:right; 
+           font-size:28px; 
+           font-weight:bold; 
+           cursor:pointer; 
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <button onclick="window.location.href='admindash.html'">Back</button>
+    <h2>User Management</h2>
+
+    <div id="userList">
+        <!-- User entries will be dynamically generated here -->
+    </div>
+
+    <button onclick="openModal('add')">Add New User</button>
+</div>
+
+<!-- Modal for Adding/Editing User -->
+<div id="userModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2 id="modalTitle">Add User</h2>
+        
+        <label for="username">Username:</label>
+        <input type="text" id="username" required><br><br>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" required><br><br>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" required><br><br>
+
+        <label for="uploads">Files Uploaded:</label>
+        <input type="number" id="uploads" value="0" min="0"><br><br>
+
+        <label for="downloads">Files Downloaded:</label>
+        <input type="number" id="downloads" value="0" min="0"><br><br>
+
+        <button id="saveButton" onclick="saveUser()">Save User</button>
+    </div>
+</div>
+
+<script>
+// Sample data structure to hold user information
+const users = [
+    { id: 1, username: 'admin', passwordHash:'hashed_password_1', email:'admin@example.com', uploads: 10, downloads: 5 },
+    { id: 2, username:'user1', passwordHash:'hashed_password_2', email:'user1@example.com', uploads: 20, downloads: 15 },
+];
+
+// Function to render users in the user list
+function renderUsers() {
+    const userList = document.getElementById('userList');
+    userList.innerHTML = ''; // Clear existing users
+
+    users.forEach(user => {
+        const userDiv = document.createElement('div');
+        userDiv.className = 'user';
+        
+        userDiv.innerHTML = `
+          <span>${user.username} (${user.email}) - Uploaded Files: ${user.uploads}, Downloaded Files: ${user.downloads}</span>
+          <div>
+              <button onclick='openModal("edit", ${user.id})'>Edit</button>
+              <button onclick='removeUser(${user.id})'>Remove</button>
+          </div>`;
+          
+          userList.appendChild(userDiv);
+    });
+}
+
+// Function to open modal for adding/editing users
+function openModal(action, userId) {
+    const modal = document.getElementById("userModal");
+    
+    if (action === 'add') {
+        document.getElementById("modalTitle").innerText = "Add User";
+        
+        // Clear input fields
+        document.getElementById("username").value = '';
+        document.getElementById("password").value = '';
+        document.getElementById("email").value = '';
+        document.getElementById("uploads").value = '0';
+        document.getElementById("downloads").value = '0';
+        
+        // Set save button action
+        document.getElementById("saveButton").onclick = () => saveUser();
+        
+    } else if (action === 'edit') {
+        const user = users.find(u => u.id === userId);
+        
+        document.getElementById("modalTitle").innerText = "Edit User";
+        
+        // Fill input fields with existing data
+        document.getElementById("username").value = user.username;
+        document.getElementById("password").value = ''; // Don't show password
+        document.getElementById("email").value = user.email;
+        document.getElementById("uploads").value = user.uploads;
+        document.getElementById("downloads").value = user.downloads;
+
+         // Set save button action
+         document.getElementById("saveButton").onclick = () => saveUser(userId);
+     }
+
+     modal.style.display = "block"; // Show modal
+}
+
+// Function to close the modal
+function closeModal() {
+    const modal = document.getElementById("userModal");
+    modal.style.display = "none";
+}
+
+// Function to save new or edited user
+function saveUser(userId) {
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value.trim(); // In a real app, hash this securely
+    const email = document.getElementById("email").value.trim();
+    const uploads = parseInt(document.getElementById("uploads").value);
+    const downloads = parseInt(document.getElementById("downloads").value);
+
+    if (!username || !password || !email) {
+       alert('Please fill in all fields.');
+       return;
+   }
+
+   if (userId) { // Editing existing user
+       const index = users.findIndex(u => u.id === userId);
+       if (index !== -1) {
+           users[index] = { id:userId, username, passwordHash:'hashed_' + password, email, uploads, downloads }; // Update hashed password
+       }
+   } else { // Adding new user
+       const newUserID = users.length ? Math.max(users.map(u => u.id)) + 1 : 1; // Increment ID based on existing users
+       users.push({ id:newUserID, username, passwordHash:'hashed_' + password, email, uploads, downloads });
+   }
+
+   closeModal(); // Close modal after saving
+   renderUsers(); // Re-render the list of users
+}
+
+// Function to remove a user from the list
+function removeUser(userId) {
+   const confirmRemove = confirm("Are you sure you want to remove this user?");
+   if (confirmRemove) {
+       const index = users.findIndex(u => u.id === userId);
+       if (index !== -1) {
+           users.splice(index, 1); // Remove from array
+           renderUsers(); // Re-render the list of users
+           alert('User removed successfully!');
+       }
+   }
+}
+
+// Initial rendering of users on page load
+renderUsers();
+</script>
+
+</body>
+</html>

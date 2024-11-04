@@ -1,0 +1,209 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #fff9dd; /* Beige background */
+    color: #333; /* Dark text color */
+    margin: 0;
+}
+
+.profile{
+    color:lightpink;
+    background-color: darkgray; /* background */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow effect */
+    padding: 10px;
+    max-width: 60px; /* Limit width */
+    margin: auto; /* Center the container */
+}
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: black; /* Black navbar */
+    padding: 15px 30px;
+    border-bottom: 3px solid gold; /* Gold bottom border for navbar */
+}
+
+.logo {
+    color: lightgoldenrodyellow; /* Light gold color for logo */
+    font-size: 24px; /* Larger font size for logo */
+}
+
+.nav-links ul {
+    list-style-type: none;
+    display: flex;
+    gap: 30px; /* Increased gap between links */
+}
+
+.nav-links a {
+    text-decoration: none;
+    text-align:center;
+    color: black; /* Light gold color for links */
+    transition: color 0.3s ease; /* Smooth transition effect */
+}
+
+.nav-links a:hover {
+    color: lightpink; /* Change link color on hover */
+}
+
+.logout-button {
+    background-color: red; /* Red logout button */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px; /* Rounded corners */
+    transition: background-color 0.3s ease; /* Smooth transition effect */
+}
+
+.reps
+{
+color: black;
+
+}
+.logout-button:hover {
+    background-color: darkred; /* Darker red on hover */
+}
+
+.content {
+    padding: 40px 20px;
+}
+
+h1 {
+    text-align: center; /* Center the heading */
+}
+
+.icon-container {
+    display: flex;
+    justify-content: space-around; /* Space out icons evenly */
+    margin-top: 30px; /* Spacing above icons */
+}
+
+.icon {
+    text-align: center; /* Center the text below icons */
+    padding: 20px;
+    border-radius: 10px; /* Rounded corners for icons */
+    background-color: #fff; /* White background for icons */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow effect */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition effect */
+}
+
+.icon:hover {
+    transform: translateY(-5px); /* Lift effect on hover */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Enhanced shadow on hover */
+    border-color: darkgoldenrod; /* Change border color on hover */
+}
+
+.icon img {
+    width: 50px; /* Set icon size */
+}
+
+.footer {
+    text-align: center;
+    margin-top: 40px;
+}
+
+.footer a {
+    text-decoration: none;
+    color: #333; /* Dark text for footer links */
+}
+
+.footer a:hover {
+    text-decoration: underline; /* Underline on hover for footer links */
+}
+.profile-content {
+    padding: 40px 20px;
+    text-align: center; /* Center align text */
+}
+
+.profile-container {
+    background-color: #fff; /* White background */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow effect */
+    padding: 30px;
+    max-width: 600px; /* Limit width */
+    margin: auto; /* Center the container */
+}
+
+.profile-picture img {
+    width: 150px; /* Set image size */
+    height: 150px; /* Set image size */
+    border-radius: 50%; /* Round image */
+    border: 3px solid gold; /* Gold border around profile picture */
+}
+
+.info-field {
+    display: flex;
+    align-items: center; /* Align items vertically */
+    justify-content: space-between; /* Space between label and input/button */
+    margin-top: 20px; /* Spacing between fields */
+}
+
+.info-field label {
+    flex-basis: 30%; /* Label takes up 30% of space */
+}
+
+.info-field input {
+    flex-grow: 1; /* Input takes up remaining space */
+    margin-right: 10px; /* Space between input and button */
+    padding: 8px; /* Padding inside input */
+}
+
+.edit-button {
+    background-color: gold; /* Gold button color */
+    color: black;
+    border: none;
+    padding: 8px 15px;
+    cursor: pointer;
+    border-radius: 5px; /* Rounded corners for buttons */
+}
+
+.edit-button:hover {
+    background-color: darkgoldenrod; /* Darker gold on hover */
+}
+.popup {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1000; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0, 0, 0, 0.5); /* Black w/ opacity */
+}
+
+.popup-content {
+    background-color: white;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid gold; /* Gold border */
+    width: 300px; /* Could be more or less, depending on screen size */
+    border-radius: 10px; /* Rounded corners */
+}
+
+.close {
+    color: red;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: darkred; /* Darker red on hover */
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.confirm-button {
+    background-color: gold; /* Gold button color */
+    color: black;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px; /* Rounded corners for buttons */
+}
+
+.confirm-button:hover {
+    background-color: darkgoldenrod; /* Darker gold on hover */
+}
