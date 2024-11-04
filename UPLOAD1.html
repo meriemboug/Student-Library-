@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <style>
+      
+         *{
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #FAF3E0;
+            color: #4D362E;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+      
+        .container {
+            width: 100%;
+            max-width: 400px;
+            padding: 2em;
+            background-color: #FFF8E7;
+            border-radius: 12px;
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        h2 {
+            text-align: center;
+            color: #4D362E;
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 1.5em;
+            border-bottom: 2px solid #D89D46;
+            padding-bottom: 0.5em;
+        }
+
+        .form-group {
+            margin-bottom: 1.5em;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            color: #A67242;
+            margin-bottom: 0.5em;
+            font-size: 1.1rem;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #D1A87D;
+            border-radius: 8px;
+            font-size: 1rem;
+            color: #4D362E;
+            background-color: #FFFDF6;
+        }
+
+        input:focus {
+            border-color: #D89D46;
+            box-shadow: 0 0 8px rgba(216, 157, 70, 0.4);
+            outline: none;
+        }
+
+      
+        button {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(45deg, #D89D46, #BB7B32);
+            color: white;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.3s;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        button:hover {
+            background: linear-gradient(45deg, #BB7B32, #A67242);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        button:active {
+            transform: translateY(1px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .link-to-login {
+            text-align: center;
+            margin-top: 1em;
+            font-size: 0.9rem;
+            color: #A67242;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Register an Account</h2>
+        <form action="upload-form.html" method="get">
+            <div class="form-group">
+                <label for="registerUsername">Username:</label>
+                <input type="text" id="registerUsername" name="registerUsername" required>
+            </div>
+            <div class="form-group">
+                <label for="registerEmail">Email:</label>
+                <input type="email" id="registerEmail" name="registerEmail" required>
+            </div>
+            <div class="form-group">
+                <label for="registerPassword">Password:</label>
+                <input type="password" id="registerPassword" name="registerPassword" required>
+            </div>
+            <button type="submit">Register</button>
+        </form>
+        <div class="link-to-login">
+            Already have an account? <a href="login.html">Login here</a>
+        </div>
+    </div>
+
+</body>
+</html>
+
