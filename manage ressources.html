@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style sheet.css">
+    <title>Manage Resources</title>
+</head>
+
+<body>
+
+    <h1>Manage Resources</h1>
+
+    <div class="search-container">
+        <input type="text" placeholder="Search..." class="search-bar">
+        <button class="search-button">Search</button>
+        <select class="filter-dropdown">
+            <option value="inf">Informatique</option>
+            <option value="shem">Shemie</option>
+            <option value="elec">Electronique</option>
+        </select>
+        <a href="upload ressources (admin).html" class="upload-button">Upload</a>
+
+    </div>
+
+    <table>
+        <tr>
+            <th>All the Files</th>
+            <th>Category</th>
+            <th>Author</th>
+            <th>Description</th>
+            <th>Delete the File</th>
+            <th>Edit the File</th>
+        </tr>
+        <tr>
+            <td>Course 1 Analysis 1</td>
+            <td>Course</td>
+            <td>Mr. Potato</td>
+            <td class="Description">
+                <div class="description-content" style="overflow:scroll; height: 100px;">
+                    <p class="Description" name="resource-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliquaLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incidid.</p>
+                </div>
+            </td>
+            <td>
+                <a href="#deleteModal" class="table-button">Delete</a>
+            </td>
+            <td>
+                <a href="edit ressources.html" class="table-button">Edit</a>
+
+            </td>
+        </tr>
+    </table>
+
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <h2>Confirm Deletion</h2>
+            <p>Are you sure you want to delete this resource?</p>
+            <div class="modal-actions">
+                 Close Modal by returning to main page 
+                <a href="#" class="cancel-button">Cancel</a>
+             
+                <a href="your-deletion-url-here" class="confirm-delete-button">Delete</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.onclick = function (event) {
+            var modal = document.getElementById('deleteModal');
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,228 @@
+
+* {
+    font-family: 'Charter', Georgia, serif;
+    background-color: #fff9dd; 
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    color: #333; 
+}
+
+body {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+h1 {
+    margin-bottom: 50px;
+    text-align: center;
+    text-transform: uppercase;
+    color: #333; 
+    font-size: 28px;
+    letter-spacing: 1px;
+    border-bottom: 2px solid #333; 
+    padding-bottom: 10px;
+}
+
+.search-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 30px;
+    max-width: 600px;
+    width: 100%;
+}
+
+.search-bar {
+    padding: 10px;
+    border: 1px solid #333; 
+    border-radius: 4px;
+    width: 100%;
+    max-width: 200px;
+    outline: none;
+    transition: box-shadow 0.3s ease;
+}
+
+.search-bar:focus {
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.search-button, .upload-button, .table-button {
+    padding: 8px 16px;
+    background-color: #333; 
+    color: white; 
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s;
+}
+
+.search-button:hover, .upload-button:hover, .table-button:hover {
+    background-color: #555; 
+    transform: scale(1.05);
+}
+
+.upload-button {
+    margin-left: auto;
+}
+
+.filter-dropdown {
+    padding: 8px;
+    border: 1px solid #333; 
+    border-radius: 4px;
+    background-color: white; 
+    transition: box-shadow 0.3s ease;
+}
+
+.filter-dropdown:focus {
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+table { 
+    margin-top: 30px;
+    border-collapse: collapse; 
+    width: 1200px;
+    max-width: 2000px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: white; 
+    height: 100px;
+}
+
+th, td {
+    border: 1px solid #333; 
+    padding: 12px;
+    text-align: center;
+    color: #333; 
+}
+
+th {
+    background-color: #E0C350; 
+    color: black; 
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+td {
+    background-color: #fff9dd; 
+}
+
+.table-button {
+    padding: 8px 16px;
+    background-color: #333; 
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s;
+}
+a.table-button, .modal-actions a {
+    text-decoration: none; /* Remove underline */
+}
+
+
+.table-button:hover {
+    background-color: #555; 
+    transform: scale(1.05);
+}
+
+.edit-ressources-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 30px;
+    max-width: 600px;
+    width: 100%;
+}
+
+label {
+    margin-bottom: 10px;
+    margin-top: 15px;
+    font-size: larger;
+}
+
+#resource-name, #resource-author, #resource-category {
+    border-radius: 10px;
+    border-width: 2px;
+    padding: 7px 10px;
+}
+
+#resource-description {
+    border-radius: 10px;
+    border-width: 2px;
+    padding: 7px 10px;
+    margin-bottom: 10px;
+    width: 300px;
+    height: 100px; 
+    resize: none; 
+    box-sizing: border-box;
+    
+}
+
+
+
+.cancel-button {
+    margin-top: 20px;
+    padding: 8px 16px;
+    background-color: #333; 
+    color: white; 
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s;
+}
+
+.cancel-button:hover {
+    background-color: #555; 
+    transform: scale(1.05);
+}
+
+
+.modal {
+    display: none; 
+    position: fixed; 
+    z-index: 1000; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    overflow: auto; 
+    background-color: rgba(0, 0, 0, 0.5); 
+}
+
+.modal-content {
+    background-color: #fff; 
+    margin: 15% auto; 
+    padding: 20px;
+    border: 1px solid #333;
+    width: 300px;
+    border-radius: 8px; 
+    text-align: center; 
+}
+
+
+#deleteModal:target {
+    display: block;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.cancel-button,
+.confirm-delete-button {
+    margin-top: 10px;
+    padding: 8px 16px;
+    background-color: #333; 
+    color: white; 
+    border-radius: 4px;
+    text-decoration: none; 
+}
+
+.cancel-button:hover,
+.confirm-delete-button:hover {
+    background-color: #555; 
+}
