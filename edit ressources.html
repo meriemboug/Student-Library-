@@ -1,48 +1,116 @@
 <!DOCTYPE html>
 <html lang="en">
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="style sheet.css">
-        <title>Edit Ressources </title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style sheet.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>Edit Resource</title>
+</head>
 
+<body>
 
-    </head>
-    <body>
+    <h1>Edit Resource</h1>
 
-        <h1>Edit Ressource</h1>
-        <div class="edit-ressources-container"></div>
-            <form id="edit-ressources-form" method="post"></form>
-            <label for="resource-name">Resource Name:</label>
-        <input type="text" id="resource-name" name="resource-name" required>
+    <form id="edit-resource-form">
+        <input type="hidden" id="resource-id" name="resource-id">
 
-       
+        <label for="resource-name">Resource Name:</label>
+        <input type="text" id="resource-name" name="resource-name" >
 
         <label for="resource-author">Author:</label>
-        <input type="text" id="resource-author" name="resource-author" rows="4" required></textarea>
+        <input type="text" id="resource-author" name="resource-author">
 
         <label for="resource-category">Category:</label>
-        <select id="resource-category" name="resource-category" required>
-            <option value="" disabled selected>Select a category</option>
+        <select id="resource-category" name="resource-category" >
+            <option value="" disabled>Select a category</option>
             <option value="inf">Informatique</option>
             <option value="shem">Shemie</option>
             <option value="elec">Electronique</option>
         </select>
 
         <label for="resource-description">Description:</label>
-        <div class="description-container">
-            <textarea id="resource-description" name="resource-description" rows="4" style="width: 100%;" required> </textarea>
-        </div>
+        <textarea id="resource-description" name="resource-description" rows="4"></textarea>
 
-        <input type="hidden" id="resource-id" name="resource-id" value="1">
-        
-        <button type="submit" class="table-button">Update Resource</button>
+        <label for="resource-file">Upload New File:</label>
+        <input type="file" id="resource-file" name="resource-file" >
+
+        <button type="submit" class="update-button">Update Resource</button>
         <a href="manage ressources.html" class="cancel-button">Cancel</a>
+    </form>
 
+    <script>
+            $(document).ready(function () {
+            function getQueryParam(param) {
+                const urlParams = new URLSearchParams(window.location.search);
+                return urlParams.get(param);
+            }
 
-        
-    </body>
+            const resourceName = decodeURIComponent(getQueryParam('name') || '');
+            const category = getQueryParam('category') || '';
+            const author = getQueryParam('author') || '';
+            const description = decodeURIComponent(getQueryParam('description') || '');
 
+            $('#resource-name').val(resourceName);
+            $('#resource-category').val(category);
+            $('#resource-author').val(author);
+            $('#resource-description').val(description);
+
+            $('#edit-resource-form').on('submit', function (e) {
+                e.preventDefault();
+
+                const updatedResource = {
+                    resourceName: $('#resource-name').val().trim(),
+                    author: $('#resource-author').val().trim(),
+                    category: $('#resource-category').val(),
+                    description: $('#resource-description').val().trim(),
+                };
+
+                const fileInput = $('#resource-file')[0].files[0];
+                if (fileInput) {
+                    updatedResource.file = fileInput.name;
+                }
+
+                if (!updatedResource.resourceName || !updatedResource.author || !updatedResource.category || !updatedResource.description) {
+                    alert('Please fill out all fields.');
+                    return;
+                }
+
+                if (fileInput) {
+                    const allowedExtensions = ['pdf', 'doc', 'docx', 'ppt', 'pptx', 'txt'];
+                    const fileExtension = fileInput.name.split('.').pop().toLowerCase();
+                    if (!allowedExtensions.includes(fileExtension)) {
+                        alert('Please upload a valid file type (PDF, DOC, DOCX, PPT, PPTX, TXT).');
+                        return;
+                    }
+                }
+
+                const resources = JSON.parse(localStorage.getItem('resources')) || [];
+                const rowIndex = getQueryParam('id'); // Ensure 'id' exists in the URL
+
+                const duplicateResource = resources.find(
+                    (r, index) => r.resourceName === updatedResource.resourceName && index !== Number(rowIndex)
+                );
+
+                if (duplicateResource) {
+                    alert('A resource with this name already exists. Please use a different name.');
+                    return;
+                }
+
+                if (rowIndex !== null && resources[rowIndex]) {
+                    resources[rowIndex] = updatedResource;
+                    localStorage.setItem('resources', JSON.stringify(resources));
+                    alert('Resource updated successfully!');
+                    window.location.href = 'manage ressources.html';
+                } else {
+                    alert('Error: Resource not found.');
+                }
+            });
+        });
+
+    </script>
+
+</body>
 
 </html>
