@@ -113,117 +113,136 @@
 </div>
 
 <script>
-// Sample data structure to hold user information
-const users = [
-    { id: 1, username: 'admin', passwordHash:'hashed_password_1', email:'admin@example.com', uploads: 10, downloads: 5 },
-    { id: 2, username:'user1', passwordHash:'hashed_password_2', email:'user1@example.com', uploads: 20, downloads: 15 },
-];
+    // Function to render users in the user list
+    const users = [
+        { id: 1, username: 'admin', passwordHash: 'hashed_password_1', email: 'admin@example.com', uploads: 10, downloads: 5 },
+        { id: 2, username: 'user1', passwordHash: 'hashed_password_2', email: 'user1@example.com', uploads: 20, downloads: 15 },
+    ];
 
-// Function to render users in the user list
-function renderUsers() {
-    const userList = document.getElementById('userList');
-    userList.innerHTML = ''; // Clear existing users
+    function renderUsers() {
+        const userList = document.getElementById('userList');
+        userList.innerHTML = ''; // Clear existing users
 
-    users.forEach(user => {
-        const userDiv = document.createElement('div');
-        userDiv.className = 'user';
-        
-        userDiv.innerHTML = `
-          <span>${user.username} (${user.email}) - Uploaded Files: ${user.uploads}, Downloaded Files: ${user.downloads}</span>
-          <div>
-              <button onclick='openModal("edit", ${user.id})'>Edit</button>
-              <button onclick='removeUser(${user.id})'>Remove</button>
-          </div>`;
-          
-          userList.appendChild(userDiv);
-    });
-}
+        users.forEach(user => {
+            const userDiv = document.createElement('div');
+            userDiv.className = 'user';
 
-// Function to open modal for adding/editing users
-function openModal(action, userId) {
-    const modal = document.getElementById("userModal");
-    
-    if (action === 'add') {
-        document.getElementById("modalTitle").innerText = "Add User";
-        
-        // Clear input fields
+            userDiv.innerHTML = `
+                <span>${user.username} (${user.email}) - Uploaded Files: ${user.uploads}, Downloaded Files: ${user.downloads}</span>
+                <div>
+                    <button onclick='openModal("edit", ${user.id})'>Edit</button>
+                    <button onclick='removeUser(${user.id})'>Remove</button>
+                </div>`;
+
+            userList.appendChild(userDiv);
+        });
+    }
+
+    function openModal(action, userId) {
+        const modal = document.getElementById("userModal");
+        const saveButton = document.getElementById("saveButton");
+
+        if (action === 'add') {
+            document.getElementById("modalTitle").innerText = "Add User";
+            resetModalInputs();
+            saveButton.onclick = () => saveUser();
+        } else if (action === 'edit') {
+            const user = users.find(u => u.id === userId);
+            document.getElementById("modalTitle").innerText = "Edit User";
+
+            document.getElementById("username").value = user.username;
+            document.getElementById("password").value = ''; // Don't show password
+            document.getElementById("email").value = user.email;
+            document.getElementById("uploads").value = user.uploads;
+            document.getElementById("downloads").value = user.downloads;
+
+            saveButton.onclick = () => saveUser(userId);
+        }
+
+        modal.style.display = "block";
+    }
+
+    function closeModal() {
+        document.getElementById("userModal").style.display = "none";
+    }
+
+    function resetModalInputs() {
         document.getElementById("username").value = '';
         document.getElementById("password").value = '';
         document.getElementById("email").value = '';
         document.getElementById("uploads").value = '0';
         document.getElementById("downloads").value = '0';
-        
-        // Set save button action
-        document.getElementById("saveButton").onclick = () => saveUser();
-        
-    } else if (action === 'edit') {
-        const user = users.find(u => u.id === userId);
-        
-        document.getElementById("modalTitle").innerText = "Edit User";
-        
-        // Fill input fields with existing data
-        document.getElementById("username").value = user.username;
-        document.getElementById("password").value = ''; // Don't show password
-        document.getElementById("email").value = user.email;
-        document.getElementById("uploads").value = user.uploads;
-        document.getElementById("downloads").value = user.downloads;
+    }
 
-         // Set save button action
-         document.getElementById("saveButton").onclick = () => saveUser(userId);
-     }
+    function validateInputs(username, password, email, uploads, downloads) {
+        const usernameRegex = /^[a-zA-Z0-9]{3,15}$/;
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-     modal.style.display = "block"; // Show modal
-}
+        if (!usernameRegex.test(username)) {
+            alert('Username must be 3-15 alphanumeric characters.');
+            return false;
+        }
+        if (!passwordRegex.test(password)) {
+            alert('Password must be at least 8 characters, include uppercase, lowercase, a digit, and a special character.');
+            return false;
+        }
+        if (!emailRegex.test(email)) {
+            alert('Please enter a valid email address.');
+            return false;
+        }
+        if (isNaN(uploads) || uploads < 0) {
+            alert('Uploads must be a non-negative integer.');
+            return false;
+        }
+        if (isNaN(downloads) || downloads < 0) {
+            alert('Downloads must be a non-negative integer.');
+            return false;
+        }
 
-// Function to close the modal
-function closeModal() {
-    const modal = document.getElementById("userModal");
-    modal.style.display = "none";
-}
+        return true;
+    }
 
-// Function to save new or edited user
-function saveUser(userId) {
-    const username = document.getElementById("username").value.trim();
-    const password = document.getElementById("password").value.trim(); // In a real app, hash this securely
-    const email = document.getElementById("email").value.trim();
-    const uploads = parseInt(document.getElementById("uploads").value);
-    const downloads = parseInt(document.getElementById("downloads").value);
+    function saveUser(userId) {
+        const username = document.getElementById("username").value.trim();
+        const password = document.getElementById("password").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const uploads = parseInt(document.getElementById("uploads").value, 10);
+        const downloads = parseInt(document.getElementById("downloads").value, 10);
 
-    if (!username || !password || !email) {
-       alert('Please fill in all fields.');
-       return;
-   }
+        if (!validateInputs(username, password, email, uploads, downloads)) {
+            return;
+        }
 
-   if (userId) { // Editing existing user
-       const index = users.findIndex(u => u.id === userId);
-       if (index !== -1) {
-           users[index] = { id:userId, username, passwordHash:'hashed_' + password, email, uploads, downloads }; // Update hashed password
-       }
-   } else { // Adding new user
-       const newUserID = users.length ? Math.max(users.map(u => u.id)) + 1 : 1; // Increment ID based on existing users
-       users.push({ id:newUserID, username, passwordHash:'hashed_' + password, email, uploads, downloads });
-   }
+        if (userId) {
+            const index = users.findIndex(u => u.id === userId);
+            if (index !== -1) {
+                users[index] = { id: userId, username, passwordHash: 'hashed_' + password, email, uploads, downloads };
+            }
+        } else {
+            const newUserId = users.length ? Math.max(...users.map(u => u.id)) + 1 : 1;
+            users.push({ id: newUserId, username, passwordHash: 'hashed_' + password, email, uploads, downloads });
+        }
 
-   closeModal(); // Close modal after saving
-   renderUsers(); // Re-render the list of users
-}
+        closeModal();
+        renderUsers();
+    }
 
-// Function to remove a user from the list
-function removeUser(userId) {
-   const confirmRemove = confirm("Are you sure you want to remove this user?");
-   if (confirmRemove) {
-       const index = users.findIndex(u => u.id === userId);
-       if (index !== -1) {
-           users.splice(index, 1); // Remove from array
-           renderUsers(); // Re-render the list of users
-           alert('User removed successfully!');
-       }
-   }
-}
+    function removeUser(userId) {
+        if (confirm("Are you sure you want to remove this user?")) {
+            const index = users.findIndex(u => u.id === userId);
+            if (index !== -1) {
+                users.splice(index, 1);
+                renderUsers();
+                alert('User removed successfully!');
+            }
+        }
+    }
 
-// Initial rendering of users on page load
-renderUsers();
+    renderUsers();
 </script>
+
+
 
 </body>
 </html>
