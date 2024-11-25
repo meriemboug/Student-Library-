@@ -166,20 +166,94 @@
        <a href="#">Privacy Policies</a> | 
        <a href="main.html" style="">Back home</a> <!-- Back to Home link -->
     </footer>
+<script>
+ 
+    // Store references to the popup and fields
+    const popup = document.getElementById('editPopup');
+    const editField = document.getElementById('editField');
+    const confirmField = document.getElementById('confirmField');
+    const popupLabel = document.getElementById('popupLabel');
+    let currentField = null; // To track which field is being edited
 
-    <!-- JavaScript Functions (add your functions here) -->
-    <!-- Example function stubs -->
-    <script>
-      function closePopup() {
-          document.getElementById('editPopup').style.display = 'none';
-      }
+    // Function to open the popup
+    function openPopup(label, fieldId) {
+        popup.style.display = 'block'; // Show the popup
+        popupLabel.textContent = `Edit ${label}`; // Set the label
+        editField.value = document.getElementById(fieldId).value; // Pre-fill the current value
+        confirmField.value = ''; // Clear confirmation input
+        currentField = fieldId; // Save the current field being edited
+    }
 
-      function confirmEdit() {
-          // Add logic to confirm edit
-      }
+    // Function to close the popup
+    function closePopup() {
+        popup.style.display = 'none'; // Hide the popup
+    }
 
-      // Add additional JavaScript functions as needed
-    </script>
+    // Function to confirm the edit
+    function confirmEdit() {
+        const newValue = editField.value.trim();
+        const confirmValue = confirmField.value.trim();
+
+        // Validate input
+        if (newValue === '') {
+            alert('Value cannot be empty.');
+            return;
+        }
+
+        // Perform specific validations based on the field being edited
+        if (currentField === 'first-name' || currentField === 'last-name') {
+            // Name and last name validation: must be letters only
+            if (!/^[a-zA-Z\s]+$/.test(newValue)) {
+                alert('Name and Last Name must contain letters only.');
+                return;
+            }
+        }
+
+        if (currentField === 'email') {
+            // Email validation: valid email format
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newValue)) {
+                alert('Please enter a valid email address.');
+                return;
+            }
+        }
+
+        if (currentField === 'phone') {
+            // Phone number validation: must be exactly 10 digits
+            if (!/^\d{10}$/.test(newValue)) {
+                alert('Phone Number must be exactly 10 digits.');
+                return;
+            }
+        }
+
+        // Ensure the new value matches the confirmation value
+        if (newValue !== confirmValue) {
+            alert('Values do not match.');
+            return;
+        }
+
+        // Update the corresponding field
+        document.getElementById(currentField).value = newValue;
+
+        // Close the popup
+        closePopup();
+    }
+
+    // Attach event listeners to "Edit" buttons
+    document.querySelectorAll('.edit-button').forEach(button => {
+        button.addEventListener('click', function () {
+            const fieldId = this.previousElementSibling.id; // Get the input field ID
+            const label = this.previousElementSibling.previousElementSibling.textContent; // Get the label
+            openPopup(label, fieldId); // Open the popup with the appropriate label and field
+        });
+    });
+
+    // Close popup when clicking outside the content
+    window.onclick = function (event) {
+        if (event.target === popup) {
+            closePopup();
+        }
+    };
+</script>
 
 </body>
 </html>
