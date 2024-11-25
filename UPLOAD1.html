@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
     <style>
-      
-         *{
+        * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
@@ -23,7 +22,6 @@
             padding: 20px;
         }
 
-      
         .container {
             width: 100%;
             max-width: 400px;
@@ -39,8 +37,6 @@
             font-size: 1.8rem;
             font-weight: bold;
             margin-bottom: 1.5em;
-            border-bottom: 2px solid #D89D46;
-            padding-bottom: 0.5em;
         }
 
         .form-group {
@@ -52,7 +48,6 @@
             font-weight: bold;
             color: #A67242;
             margin-bottom: 0.5em;
-            font-size: 1.1rem;
         }
 
         input[type="text"],
@@ -63,47 +58,28 @@
             border: 2px solid #D1A87D;
             border-radius: 8px;
             font-size: 1rem;
-            color: #4D362E;
-            background-color: #FFFDF6;
         }
 
-        input:focus {
-            border-color: #D89D46;
-            box-shadow: 0 0 8px rgba(216, 157, 70, 0.4);
-            outline: none;
-        }
-
-      
         button {
             width: 100%;
             padding: 14px;
             border: none;
             border-radius: 8px;
-            background: linear-gradient(45deg, #D89D46, #BB7B32);
+            background-color: #D89D46;
             color: white;
             font-size: 1.2rem;
-            font-weight: bold;
             cursor: pointer;
-            transition: transform 0.2s, background 0.3s;
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
         }
 
         button:hover {
-            background: linear-gradient(45deg, #BB7B32, #A67242);
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            background-color: #BB7B32;
         }
 
-        button:active {
-            transform: translateY(1px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        .link-to-login {
-            text-align: center;
-            margin-top: 1em;
-            font-size: 0.9rem;
-            color: #A67242;
+        .error-message {
+          color: red; 
+          margin-top: -10px; 
+          margin-bottom: 10px; 
+          font-size: 0.9rem; 
         }
     </style>
 </head>
@@ -111,26 +87,67 @@
 
     <div class="container">
         <h2>Register an Account</h2>
-        <form action="upload-form.html" method="get">
-            <div class="form-group">
-                <label for="registerUsername">Username:</label>
-                <input type="text" id="registerUsername" name="registerUsername" required>
-            </div>
-            <div class="form-group">
-                <label for="registerEmail">Email:</label>
-                <input type="email" id="registerEmail" name="registerEmail" required>
-            </div>
-            <div class="form-group">
-                <label for="registerPassword">Password:</label>
-                <input type="password" id="registerPassword" name="registerPassword" required>
-            </div>
-            <button type="submit">Register</button>
-        </form>
-        <div class="link-to-login">
-            Already have an account? <a href="login.html">Login here</a>
-        </div>
-    </div>
+        <form id="registrationForm" action="login.html" method="post">
+              <div class="form-group">
+                  <label for="registerUsername">Username:</label>
+                  <input type="text" id="registerUsername" name="registerUsername" required>
+                  <div class="error-message" id="usernameError"></div>
+              </div>
+              <div class="form-group">
+                  <label for="registerEmail">Email:</label>
+                  <input type="email" id="registerEmail" name="registerEmail" required>
+                  <div class="error-message" id="emailError"></div>
+              </div>
+              <div class="form-group">
+                  <label for="registerPassword">Password:</label>
+                  <input type="password" id="registerPassword" name="registerPassword" required>
+                  <div class="error-message" id="passwordError"></div>
+              </div>
+              <button type="submit">Register</button>
+              <div class="link-to-login">
+                  Already have an account? <a href="login.html">Login here</a>
+              </div>
+          </form>
+      </div>
+
+      <script>
+          document.getElementById('registrationForm').addEventListener('submit', function(e) {
+              e.preventDefault(); 
+
+          
+              document.querySelectorAll('.error-message').forEach(function(el) {
+                  el.textContent = '';
+              });
+
+              let isValid = true;
+
+              const username = document.getElementById('registerUsername').value.trim();
+              if (username.length < 3) {
+                  document.getElementById('usernameError').textContent = 'Username must be at least 3 characters long.';
+                  isValid = false; 
+              }
+
+              const email = document.getElementById('registerEmail').value.trim();
+              const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; 
+              if (!emailPattern.test(email)) {
+                  document.getElementById('emailError').textContent = 'Please enter a valid email address.';
+                  isValid = false; 
+              }
+
+             
+              const password = document.getElementById('registerPassword').value.trim();
+              if (password.length < 6) {
+                  document.getElementById('passwordError').textContent = 'Password must be at least 6 characters long.';
+                  isValid = false; 
+              }
+
+              
+              if (isValid) {
+                  alert("Registration successful!"); 
+                  window.location.href = "login.html"; 
+              }
+          });
+      </script>
 
 </body>
 </html>
-
