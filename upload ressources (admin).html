@@ -1,49 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style sheet.css">
     <title>Upload Resource</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="style sheet.css">
 </head>
-
 <body>
-
     <h1>Upload Resource</h1>
-    <div class="edit-ressources-container">
-        <form id="edit-resources-form" method="post" enctype="multipart/form-data"> 
-            <label for="resource-name">Resource Name:</label>
-            <input type="text" id="resource-name" name="resource-name" required><br>
+    <form id="upload-resource-form">
+        <label for="resource-name">Resource Name:</label>
+        <input type="text" id="resource-name" ><br>
+
+        <label for="resource-author">Author:</label>
+        <input type="text" id="resource-author" ><br>
+
+        <label for="resource-category">Category:</label>
+        <select id="resource-category" >
+            <option value="" disabled selected>Select a category</option>
+            <option value="inf">Informatique</option>
+            <option value="shem">Shemie</option>
+            <option value="elec">Electronique</option>
+        </select><br>
+
+        <label for="resource-description">Description:</label>
+        <textarea id="resource-description" rows="4"></textarea><br>
+
+        <label for="resource-file">Upload File:</label>
+        <input type="file" id="resource-file" ><br>
+
+        <button type="submit" id="submit-button">Upload Resource</button>
+        <button type="cancel" id="cancel-button">Cancel</button>
+    </form>
+
+    <script>
+        $(document).ready(function () {
+
+            $('#cancel-button').on('click', function () {
+             window.location.href = 'manage ressources.html';
+            });
+
+            $('#upload-resource-form').on('submit', function (e) {
+                e.preventDefault();
+
+                const resourceName = $('#resource-name').val().trim();
+                const author = $('#resource-author').val().trim();
+                const category = $('#resource-category').val().trim();
+                const description = $('#resource-description').val().trim();
+                const file = $('#resource-file')[0].files[0]?.name.trim(); 
+
+                if (!resourceName || !author || !category || !description || !file) {
+                    alert('Please fill out all fields and upload a file.');
+                    return;
+                }
+
+                const allowedExtensions = ['pdf', 'doc', 'docx', 'ppt', 'pptx', 'txt'];
+                const fileExtension = file.split('.').pop().toLowerCase();
+                if (!allowedExtensions.includes(fileExtension)) {
+                    alert('Please upload a valid file type (PDF, DOC, DOCX, PPT, PPTX, TXT).');
+                    return;
+                }
+
+                const resources = JSON.parse(localStorage.getItem('resources')) || [];
+
+                const existingResource = resources.find(r => r.resourceName === resourceName);
+                if (existingResource) {
+                    alert('A resource with this name already exists. Please use a different name.');
+                    return;
+                }
+
+                resources.push({ resourceName, author, category, description, file });
+                localStorage.setItem('resources', JSON.stringify(resources));
 
 
+                alert('Resource uploaded successfully! Redirecting to Manage Resources.');
+                setTimeout(() => {
+                    window.location.href = 'manage ressources.html';
+                }, 1000);
 
-            <label for="resource-author">Author:</label>
-            <input type="text" id="resource-author" name="resource-author" required><br>
-
-            <label for="resource-category">Category:</label>
-            <select id="resource-category" name="resource-category" required>
-                <option value="" disabled selected>Select a category</option>
-                <option value="inf">Informatique</option>
-                <option value="shem">Shemie</option>
-                <option value="elec">Electronique</option>
-            </select><br>
-
-            <label for="resource-description">Description:</label>
-            <div class="description-container">
-                <textarea id="resource-description" name="resource-description" rows="4" style="width: 100%;" required></textarea>
-            </div><br>
-
-            <label for="resource-file">Upload File:</label> 
-            <input type="file" id="resource-file" name="resource-file" accept=".pdf,.doc,.docx,.ppt,.pptx,.txt" required>
-            <br>
-            <input type="hidden" id="resource-id" name="resource-id" value="1">
-
-            <button type="submit" class="table-button">Update Resource</button>
-            <a href="manage ressources.html" class="cancel-button">Cancel</a>
-        </form>
-    </div>
-
+            });
+        });
+    </script>
 </body>
-
 </html>
