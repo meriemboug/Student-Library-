@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Management Interface</title>
+    <title>Report Management Interface</title>
     <style>
         body {
-            font-family: 'Charter', Georgia, serif;
+            font-family: Arial, sans-serif;
             background-color: #f5f5dc; /* Beige */
             color: #000; /* Black */
             margin: 0;
@@ -22,28 +22,36 @@
         }
         h2 {
             text-align: center;
-            color: #4B4B4B; /* Dark Gray */
+            color: #8B4513; /* Darker Brown */
         }
-        .user {
+        .report {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 15px;
             margin-bottom: 10px;
             border-radius: 5px;
-            background-color: #f9f9f9; /* Light Gold */
+            transition: background-color 0.3s ease;
+            cursor: pointer;
         }
-        .user:hover {
-            background-color: #e2e2e2; /* Light Gray on hover */
+        .new {
+            background-color: white;
+        }
+        .clicked {
+            background-color: #d3d3d3; /* Gray */
+        }
+        .notification {
+            background-color: lightblue;
+            padding: 5px;
+            border-radius: 3px;
+            font-weight: bold;
+            margin-right: 10px;
         }
         button {
-
-     background-color: gold; /* Gold button color */
-    color: black;
-    border: none;
-    padding: 8px 15px;
-    cursor: pointer;
-    border-radius: 5px; /* Rounded corners for buttons */
+            background-color: #f9f9f9; /* Light Gold */
+            border: none;
+            cursor: pointer;
+            margin-left: 10px; /* Space between buttons */
         }
         .modal {
             display: none; 
@@ -63,7 +71,7 @@
             margin: 5% auto; 
             padding: 20px; 
             border-radius: 10px; 
-            width: 50%; 
+            width: 80%; 
         }
         .close {
            color: #aaa; 
@@ -78,171 +86,129 @@
 
 <div class="container">
     <button onclick="window.location.href='admindash.html'">Back</button>
-    <h2>User Management</h2>
+    <h2>Report Management</h2>
 
-    <div id="userList">
-        <!-- User entries will be dynamically generated here -->
+    <div id="reportList">
+        <div class="report new" id="report1" onclick="showReportDetails('report1')">
+             <div>
+                <span class="notification">New</span>
+                <strong>Report Title 1</strong><br>
+                Module Name | Year L1 | Type Cours
+             </div>
+             <div>
+                 <button onclick="editReport('report1')">Edit</button>
+                 <button onclick="removeReport('report1')">Remove</button>
+             </div>
+         </div>
+
+         <div class="report new" id="report2" onclick="showReportDetails('report2')">
+             <div>
+                <span class="notification">New</span>
+                <strong>Report Title 2</strong><br>
+                Module Name | Year L2 | Type TD
+             </div>
+             <div>
+                 <button onclick="editReport('report2')">Edit</button>
+                 <button onclick="removeReport('report2')">Remove</button>
+             </div>
+         </div>
+
+         <!-- Additional reports can be added here -->
     </div>
 
-    <button onclick="openModal('add')">Add New User</button>
 </div>
 
-<!-- Modal for Adding/Editing User -->
-<div id="userModal" class="modal">
+<!-- Modal for Report Details -->
+<div id="myModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeModal()">&times;</span>
-        <h2 id="modalTitle">Add User</h2>
-        
-        <label for="username">Username:</label>
-        <input type="text" id="username" required><br><br>
-
-        <label for="password">Password:</label>
-        <input type="password" id="password" required><br><br>
-
-        <label for="email">Email:</label>
-        <input type="email" id="email" required><br><br>
-
-        <label for="uploads">Files Uploaded:</label>
-        <input type="number" id="uploads" value="0" min="0"><br><br>
-
-        <label for="downloads">Files Downloaded:</label>
-        <input type="number" id="downloads" value="0" min="0"><br><br>
-
-        <button id="saveButton" onclick="saveUser()">Save User</button>
+        <h2 id="modalTitle"></h2>
+        <p><strong>Module:</strong> <span id="modalModule"></span></p>
+        <p><strong>Year:</strong> <span id="modalYear"></span></p>
+        <p><strong>Type:</strong> <span id="modalType"></span></p>
+        <p><strong>Description:</strong></p>
+        <p id="modalDescription"></p>
     </div>
 </div>
 
 <script>
-    // Function to render users in the user list
-    const users = [
-        { id: 1, username: 'admin', passwordHash: 'hashed_password_1', email: 'admin@example.com', uploads: 10, downloads: 5 },
-        { id: 2, username: 'user1', passwordHash: 'hashed_password_2', email: 'user1@example.com', uploads: 20, downloads: 15 },
-    ];
+// Data structure to hold report information
+const reports = {
+    report1: { title: 'Report Title 1', moduleName: 'Module Name', year:'L1', type:'Cours', description:'This is the description for report one.'},
+    report2: { title:'Report Title 2', moduleName:'Module Name', year:'L2', type:'TD', description:'This is the description for report two.'}
+};
 
-    function renderUsers() {
-        const userList = document.getElementById('userList');
-        userList.innerHTML = ''; // Clear existing users
+function showReportDetails(reportId) {
+    const report = reports[reportId];
+    
+    // Fill modal with report details
+    document.getElementById("modalTitle").innerText = report.title;
+    document.getElementById("modalModule").innerText = report.moduleName;
+    document.getElementById("modalYear").innerText = report.year;
+    document.getElementById("modalType").innerText = report.type;
+    document.getElementById("modalDescription").innerText = report.description;
 
-        users.forEach(user => {
-            const userDiv = document.createElement('div');
-            userDiv.className = 'user';
+    // Show the modal
+    const modal = document.getElementById("myModal");
+    modal.style.display = "block";
 
-            userDiv.innerHTML = `
-                <span>${user.username} (${user.email}) - Uploaded Files: ${user.uploads}, Downloaded Files: ${user.downloads}</span>
-                <div>
-                    <button onclick='openModal("edit", ${user.id})'>Edit</button>
-                    <button onclick='removeUser(${user.id})'>Remove</button>
-                </div>`;
-
-            userList.appendChild(userDiv);
-        });
+    // Mark the report as clicked
+    const reportElement = document.getElementById(reportId);
+    reportElement.classList.remove('new');
+    reportElement.classList.add('clicked');
+    
+    const notification = reportElement.querySelector('.notification');
+    if (notification) {
+      notification.style.display = 'none'; // Hide the "New" notification
     }
+}
 
-    function openModal(action, userId) {
-        const modal = document.getElementById("userModal");
-        const saveButton = document.getElementById("saveButton");
+function closeModal() {
+    const modal = document.getElementById("myModal");
+    modal.style.display = "none";
+}
 
-        if (action === 'add') {
-            document.getElementById("modalTitle").innerText = "Add User";
-            resetModalInputs();
-            saveButton.onclick = () => saveUser();
-        } else if (action === 'edit') {
-            const user = users.find(u => u.id === userId);
-            document.getElementById("modalTitle").innerText = "Edit User";
-
-            document.getElementById("username").value = user.username;
-            document.getElementById("password").value = ''; // Don't show password
-            document.getElementById("email").value = user.email;
-            document.getElementById("uploads").value = user.uploads;
-            document.getElementById("downloads").value = user.downloads;
-
-            saveButton.onclick = () => saveUser(userId);
-        }
-
-        modal.style.display = "block";
-    }
-
-    function closeModal() {
-        document.getElementById("userModal").style.display = "none";
-    }
-
-    function resetModalInputs() {
-        document.getElementById("username").value = '';
-        document.getElementById("password").value = '';
-        document.getElementById("email").value = '';
-        document.getElementById("uploads").value = '0';
-        document.getElementById("downloads").value = '0';
-    }
-
-    function validateInputs(username, password, email, uploads, downloads) {
-        const usernameRegex = /^[a-zA-Z0-9]{3,15}$/;
-        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-        if (!usernameRegex.test(username)) {
-            alert('Username must be 3-15 alphanumeric characters.');
-            return false;
-        }
-        if (!passwordRegex.test(password)) {
-            alert('Password must be at least 8 characters, include uppercase, lowercase, a digit, and a special character.');
-            return false;
-        }
-        if (!emailRegex.test(email)) {
-            alert('Please enter a valid email address.');
-            return false;
-        }
-        if (isNaN(uploads) || uploads < 0) {
-            alert('Uploads must be a non-negative integer.');
-            return false;
-        }
-        if (isNaN(downloads) || downloads < 0) {
-            alert('Downloads must be a non-negative integer.');
-            return false;
-        }
-
-        return true;
-    }
-
-    function saveUser(userId) {
-        const username = document.getElementById("username").value.trim();
-        const password = document.getElementById("password").value.trim();
-        const email = document.getElementById("email").value.trim();
-        const uploads = parseInt(document.getElementById("uploads").value, 10);
-        const downloads = parseInt(document.getElementById("downloads").value, 10);
-
-        if (!validateInputs(username, password, email, uploads, downloads)) {
-            return;
-        }
-
-        if (userId) {
-            const index = users.findIndex(u => u.id === userId);
-            if (index !== -1) {
-                users[index] = { id: userId, username, passwordHash: 'hashed_' + password, email, uploads, downloads };
-            }
-        } else {
-            const newUserId = users.length ? Math.max(...users.map(u => u.id)) + 1 : 1;
-            users.push({ id: newUserId, username, passwordHash: 'hashed_' + password, email, uploads, downloads });
-        }
-
+window.onclick = function(event) {
+    const modal = document.getElementById("myModal");
+    if (event.target === modal) {
         closeModal();
-        renderUsers();
     }
+}
 
-    function removeUser(userId) {
-        if (confirm("Are you sure you want to remove this user?")) {
-            const index = users.findIndex(u => u.id === userId);
-            if (index !== -1) {
-                users.splice(index, 1);
-                renderUsers();
-                alert('User removed successfully!');
-            }
-        }
-    }
+function editReport(reportId) {
+    const report = reports[reportId];
+    
+    // Prompt user for new title and description
+    const newTitle = prompt("Edit Report Title:", report.title);
+    const newDescription = prompt("Edit Report Description:", report.description);
 
-    renderUsers();
+    if (newTitle !== null && newDescription !== null) {
+      reports[reportId].title = newTitle || report.title; // Keep old title if canceled
+      reports[reportId].description = newDescription || report.description; // Keep old description if canceled
+      
+      // Update the displayed title in the report list
+      const reportElement = document.getElementById(reportId);
+      reportElement.querySelector('strong').innerText = reports[reportId].title;
+
+      // Update modal information if it's open
+      if (document.getElementById("myModal").style.display === "block") {
+          showReportDetails(reportId);
+      }
+      
+      alert("Report updated successfully!");
+   }
+}
+
+function removeReport(reportId) {
+   const confirmRemove = confirm("Are you sure you want to remove this report?");
+   if (confirmRemove) {
+       const reportElement = document.getElementById(reportId);
+       reportElement.remove(); // Remove from DOM
+       delete reports[reportId]; // Remove from data structure
+       alert("Report removed successfully!");
+   }
+}
 </script>
-
-
 
 </body>
 </html>
